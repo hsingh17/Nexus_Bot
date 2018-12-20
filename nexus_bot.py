@@ -112,8 +112,3 @@ async def champion_mastery(ctx, summoner_name):
 
 bot.run(discord_key)
 
-#Goals for tommrow:
-#.help command
-#match history?
-#if no match history then safely upload to github 
-
