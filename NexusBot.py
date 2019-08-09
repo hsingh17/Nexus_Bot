@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import discord
 from discord.ext import commands
 import requests
@@ -20,14 +21,14 @@ with open("champions.json", "r", encoding = "utf-8") as file:
 
 #Fetch summoner ID 
 def get_summoner_id(summoner_name):
-    url = f"https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/{summoner_name}?api_key={riot_key}"
+    url = f"https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{summoner_name}?api_key={riot_key}"
     json = requests.get(url).json()
     summoner_id = json['id']
     return summoner_id
 
 #Fetch ranked data of all ranked queue types for the current season 
 def get_summoner_data(summoner_name):
-    url = f"https://na1.api.riotgames.com/lol/league/v3/positions/by-summoner/{get_summoner_id(summoner_name)}?api_key={riot_key}"
+    url = f"https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/{get_summoner_id(summoner_name)}?api_key={riot_key}"
     json = requests.get(url).json()
     data = []
     for queue_type in json:
@@ -38,7 +39,7 @@ def get_summoner_data(summoner_name):
 
 #Fetch top 3 champion masteries for summoner
 def get_champion_mastery_data(summoner_name):
-    url = f"https://na1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/{get_summoner_id(summoner_name)}?api_key={riot_key}"
+    url = f"https://na1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/{get_summoner_id(summoner_name)}?api_key={riot_key}"
     json = requests.get(url).json()
     top_three_champs = []
     for champ in json:
@@ -99,7 +100,7 @@ async def summoner_data(ctx, summoner_name):
         for data in all_data:
             await create_summoner_embed(ctx, data, summoner_name)
     except: 
-        await ctx.send(f"\n{summoner_name} is not a valid summoner! Please try again.```")
+        await ctx.send(f"```\n{summoner_name} is not a valid summoner! Please try again.```")
 
 
 @bot.command()
@@ -111,4 +112,5 @@ async def champion_mastery(ctx, summoner_name):
         await ctx.send(f"```\n{summoner_name} is not a valid summoner! Please try again.```")
 
 bot.run(discord_key)
+
 
